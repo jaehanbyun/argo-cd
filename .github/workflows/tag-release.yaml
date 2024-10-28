@@ -8,7 +8,7 @@ on:
       - 'VERSION'
 
 jobs:
-  publish-release-tag:
+  trigger-release:
     permissions:
       contents: write
     name: Automatically Tag Release ${{ github.ref_name }} Branch
