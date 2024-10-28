@@ -56,12 +56,12 @@ jobs:
           make manifests-local VERSION=${{ inputs.TARGET_VERSION }}
           git diff
 
-      - name: Generate version compatibility table
-        run: |
-          git stash
-          bash hack/update-supported-versions.sh
-          git add -u .
-          git stash pop
+      # - name: Generate version compatibility table
+      #   run: |
+      #     git stash
+      #     bash hack/update-supported-versions.sh
+      #     git add -u .
+      #     git stash pop
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f  # v7.0.5
@@ -73,5 +73,15 @@ jobs:
           branch-suffix: random
           signoff: true
           labels: release
+          
+      - name: Setup Git author information
+        run: |
+          set -ue
+          git config --global user.email 'ci@argoproj.com'
+          git config --global user.name 'CI'
+      
+      - name: Trigger Release Script
+        run: |
+          bash hack/trigger-release.sh v${{ inputs.TARGET_VERSION }} origin
 
 
