@@ -74,14 +74,32 @@ jobs:
           signoff: true
           labels: release
           
+      # - name: Setup Git author information
+      #   run: |
+      #     set -ue
+      #     git config --global user.email 'ci@argoproj.com'
+      #     git config --global user.name 'CI'
+      
+      # - name: Trigger Release Script
+      #   run: |
+      #     bash hack/trigger-release.sh v${{ inputs.TARGET_VERSION }} origin
+
+  trigger-release:
+    needs: prepare-release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.TARGET_BRANCH }}
+
       - name: Setup Git author information
         run: |
-          set -ue
           git config --global user.email 'ci@argoproj.com'
           git config --global user.name 'CI'
-      
+
       - name: Trigger Release Script
         run: |
           bash hack/trigger-release.sh v${{ inputs.TARGET_VERSION }} origin
-
-
