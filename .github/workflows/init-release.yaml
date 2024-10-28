@@ -86,6 +86,9 @@ jobs:
 
   trigger-release:
     needs: prepare-release
+    permissions:
+      contents: write
+    name: Automatically Tag Release ${{ inputs.TARGET_BRANCH }} Branch
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
